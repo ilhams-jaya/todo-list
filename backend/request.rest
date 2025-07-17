@@ -1,0 +1,24 @@
+GET http://localhost:5000/todos
+
+###
+GET http://localhost:5000/todos/1
+
+###
+POST http://localhost:5000/todos
+Content-Type: application/json
+
+{
+    "name" : "Belajar Frontend",
+    "deadline": "2024-01-10"
+}
+###
+PATCH http://localhost:5000/todos/1
+Content-Type: application/json
+
+{
+    "name" : "Belajar Backend",
+    "deadline": "2024-01-10"
+}
+
+###
+DELETE  http://localhost:5000/todos/1
