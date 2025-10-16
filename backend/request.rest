@@ -1,24 +1,24 @@
-GET http://localhost:5000/todos
+GET https://todo-list-nine-livid.vercel.app/todos
 
 ###
-GET http://localhost:5000/todos/1
+GET https://todo-list-nine-livid.vercel.app/1
 
 ###
-POST http://localhost:5000/todos
+POST https://todo-list-nine-livid.vercel.app/todos
 Content-Type: application/json
 
 {
-    "title" : "Belajar Frontend",
+    "title" : "Belajar Bahasa Mandarin",
     "deadline": "2025-01-10",
     "completed": true
 }
 
 ###
-PATCH http://localhost:5000/todos/4
+PATCH https://todo-list-nine-livid.vercel.app/todos/2
 Content-Type: application/json
 
 {
-    "title" : "Belajar Backend",
+    "title" : "Belajar Bahasa Indonesia",
     "deadline": "2025-01-10",
     "completed": true
 }
