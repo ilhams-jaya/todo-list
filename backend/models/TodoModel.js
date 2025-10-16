@@ -1,18 +1,43 @@
-import { Sequelize } from "sequelize";
+import { Sequelize, DataTypes } from "sequelize";
 import db from "../config/Database.js";
 
-const {DataTypes} = Sequelize;
-
 const Todo = db.define('todo', {
-    name: DataTypes.STRING,
-    deadline: DataTypes.DATE
-
-},{
-    freezeTableName:true
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    title: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    deadline: {
+        type: DataTypes.DATE,
+        allowNull: false
+    },
+    completed: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    }
+}, {
+    freezeTableName: true,
+    timestamps: false
 });
 
-export default Todo;
+// Initialize database connection and sync
+const initDatabase = async () => {
+    try {
+        await db.authenticate();
+        await db.sync();
+        console.log('Database synchronized successfully.');
+    } catch (error) {
+        console.error('Database synchronization failed:', error);
+    }
+};
 
-(async()=>{
-    await db.sync();
-})();
+// Only run sync in development or when explicitly called
+if (process.env.NODE_ENV !== 'production') {
+    initDatabase();
+}
+
+export default Todo;
