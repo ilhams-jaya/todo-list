@@ -3,6 +3,7 @@ import cors from "cors";
 import TodoRoute from "./routes/TodoRoute.js";
 import db from "./config/Database.js";
 import "./models/TodoModel.js"; 
+import "mysql2"; // ensure dialect package is bundled on Vercel
 
 const PORT = 5000
 
