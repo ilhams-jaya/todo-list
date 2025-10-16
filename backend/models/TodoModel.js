@@ -12,7 +12,3 @@ const Todo = db.define('todo', {
 });
 
 export default Todo;
-
-(async()=>{
-    await db.sync();
-})();
