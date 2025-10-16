@@ -18,10 +18,19 @@ const config = {
         port: process.env.DB_PORT || 3306,
         logging: false,
         pool: {
-            max: 5,
+            max: 2, // Reduced for serverless
             min: 0,
-            acquire: 30000,
-            idle: 10000
+            acquire: 10000, // Reduced timeout
+            idle: 5000
+        },
+        dialectOptions: {
+            connectTimeout: 10000,
+            acquireTimeout: 10000,
+            timeout: 10000,
+            reconnect: true
+        },
+        retry: {
+            max: 3
         }
     }
 };
@@ -29,12 +38,29 @@ const config = {
 const env = process.env.NODE_ENV || 'development';
 const dbConfig = config[env];
 
-const db = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
-    host: dbConfig.host,
-    dialect: dbConfig.dialect,
-    port: dbConfig.port,
-    logging: dbConfig.logging,
-    pool: dbConfig.pool
-});
+// Create sequelize instance with proper error handling
+let db;
+try {
+    db = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
+        host: dbConfig.host,
+        dialect: dbConfig.dialect,
+        port: dbConfig.port,
+        logging: dbConfig.logging || false,
+        pool: dbConfig.pool,
+        dialectOptions: dbConfig.dialectOptions,
+        retry: dbConfig.retry,
+        define: {
+            freezeTableName: true,
+            timestamps: false
+        }
+    });
+} catch (error) {
+    console.error('Database configuration error:', error);
+    // Create a fallback sequelize instance
+    db = new Sequelize({
+        dialect: 'mysql',
+        logging: false
+    });
+}
 
 export default db;

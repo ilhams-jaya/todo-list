@@ -21,21 +21,34 @@ const Todo = db.define('todo', {
     }
 }, {
     freezeTableName: true,
-    timestamps: false
+    timestamps: false,
+    tableName: 'todo'
 });
 
-// Initialize database connection and sync
-const initDatabase = async () => {
+export const ensureConnection = async () => {
     try {
         await db.authenticate();
-        await db.sync();
-        console.log('Database synchronized successfully.');
+        return true;
     } catch (error) {
-        console.error('Database synchronization failed:', error);
+        console.error('Database connection failed:', error);
+        return false;
     }
 };
 
-// Only run sync in development or when explicitly called
+const initDatabase = async () => {
+    try {
+        await db.authenticate();
+        console.log('Database connection established successfully.');
+        
+        if (process.env.NODE_ENV !== 'production') {
+            await db.sync();
+            console.log('Database synchronized successfully.');
+        }
+    } catch (error) {
+        console.error('Database initialization failed:', error);
+    }
+};
+
 if (process.env.NODE_ENV !== 'production') {
     initDatabase();
 }
